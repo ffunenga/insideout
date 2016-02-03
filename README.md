@@ -20,14 +20,14 @@ Imagine you have the following source tree:
 
     1 directory, 7 files
 
-Now, with the `insideout` tool we
-will pull the package files to the root directory, and push
-all the residual development files (marked as *ugly* above) away from sight.
+Now, with the `insideout` tool we will pull the package files to the root
+directory, and push all the residual development files (marked as *ugly*
+above) away from sight.
 
     $ insideout
     $ tree
     .
-    ├── metafiles
+    ├── __ignore__
     │   ├── package_name.txt  # backup file with the package name
     │   └── (...)               # ugly files went here
     ├── README.md             # ok. Github can generate an HTML page from this.
@@ -37,10 +37,10 @@ all the residual development files (marked as *ugly* above) away from sight.
 
     1 directory, 8 files
 
-`README.md` was left behind in order to
-allow presenting an HTML page on github. `metafiles/__pkgname.txt` file
-was created to backup the package name, which now allows to reverse the
-previous swap using the same command: `insideout`.
+`README.md` was left behind in order to allow presenting an HTML page on
+github. `__ignore__/package_name.txt` file was created to backup the package
+name, which now allows to reverse the previous swap using the same command:
+`insideout`.
 
 *insideout* is pure Python code, 2 and 3 compatible.
 
@@ -52,13 +52,13 @@ implicit from (i.e. with the *ugly* files on the root directory).
 
 The `insideout` command allows the following workflow:
 
-1. Clone the intended git repository: `git clone <clone_url>`
-2. Swap files to the implicit form: `insideout`
+1. Clone the intended git repository: `$ git clone <clone_url>`
+2. Swap files to the implicit form: `$ insideout`
 3. Prefix all git commands with *insideout*. Examples:
-    - `insideout git status`
-    - `insideout git add compiler.py`
-    - `insideout git commit -m "adds compiler"`
-    - `insideout git push origin master`
+    - `$ insideout git status`
+    - `$ insideout git add compiler.py`
+    - `$ insideout git commit -m "adds compiler"`
+    - `$ insideout git push origin master`
 
 ## Bad examples
 
