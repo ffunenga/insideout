@@ -28,12 +28,12 @@ all the residual development files (marked as *ugly* above) away from sight.
     $ tree
     .
     ├── metafiles
-    │   ├── __pkgname.txt     # backup file with the package name
-    │   └── (...)             # ugly files went here
-    ├── README.md           # ok. Github can generate an HTML page from this.
-    ├── __init__.py         # ok. exposed
-    ├── main.py             # ok. exposed
-    └── tools.py            # ok. exposed
+    │   ├── package_name.txt  # backup file with the package name
+    │   └── (...)               # ugly files went here
+    ├── README.md             # ok. Github can generate an HTML page from this.
+    ├── __init__.py           # ok. explicitly observable
+    ├── main.py               # ok. explicitly observable
+    └── tools.py              # ok. explicitly observable
 
     1 directory, 8 files
 
