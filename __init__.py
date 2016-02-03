@@ -5,4 +5,4 @@ __description__ = ('A tool to swap the files on your repository\'s root '
                    'directory with the ones inside your python package.')
 
 
-from main import main
+from .main import main
