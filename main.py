@@ -56,9 +56,9 @@ class Tools:
 
 def become_explicit():
     with Tools.OnErrorMsg('failed to retrieve package name'):
-        _cmd = ['python', 'setup.py', '--name']
-        pkgname = subprocess.check_output(_cmd).decode('utf-8')
-        pkgname = pkgname.strip()
+        _cmd = ['python', '-B', 'setup.py', '--name']
+        pkgname = subprocess.check_output(_cmd, stderr=subprocess.PIPE)
+        pkgname = pkgname.decode('utf-8').strip()
 
     if not (os.path.exists(pkgname) and os.path.isdir(pkgname)):
         sys.exit('package "%s" folder does not exist' % pkgname)
