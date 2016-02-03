@@ -74,7 +74,7 @@ def become_explicit():
 
     files = list(os.listdir('.'))
     readme = Tools.filter_readme(files)
-    ignore_list = [Config.IGNORE_PATH, pkgname, readme]
+    ignore_list = [Config.IGNORE_PATH, pkgname, readme, '.git']
     _err_fmt = 'failed to hide residual entry "%s" in "%s"'
     for source in files:
         if source not in ignore_list:
@@ -112,7 +112,7 @@ def become_implicit():
 
     files = list(os.listdir('.'))
     readme = Tools.filter_readme(files)
-    ignore_list = [Config.IGNORE_PATH, readme]
+    ignore_list = [Config.IGNORE_PATH, pkgname, readme, '.git']
     _err_fmt = 'failed to move package file from "%s" to "%s"'
     for source in files:
         if source not in ignore_list:
