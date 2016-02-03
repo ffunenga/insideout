@@ -3,47 +3,62 @@
 > Why aren't the files inside a Python package the first thing we see when we look at its github repository?
 
 *insideout* is a tool to swap the files on your repository's root directory
-with the ones inside your python package, and vice-versa. This tool makes the
-term "repository" **literally** equivalent to the term "Python package".
+with the ones inside your python package, and also reverse that operation.
 
-It works like this:
+Imagine you have the following source tree:
 
     $ tree
     .
-    ├── tests               # this is a typical directory with tests
-    │   └── (...)
-    ├── package             # this package is an example
-    │   ├── __init__.py
-    │   ├── main.py
-    │   └── tools.py
-    ├── LICENSE.txt         # residual file
-    ├── README.md           # residual file
-    ├── setup.py            # residual file
-    └── tox.ini             # residual file
+    ├── package
+    │   ├── __init__.py     # should be in the root directory
+    │   ├── main.py         # should be in the root directory
+    │   └── tools.py        # should be in the root directory
+    ├── README.md           # ok. Github can generate an HTML page from this.
+    ├── LICENSE.txt         # ugly. should not be here
+    ├── setup.py            # ugly. should not be here
+    └── tox.ini             # ugly. should not be here
 
-    2 directories, 9 files
+    1 directory, 7 files
+
+Now, with the `insideout` tool we
+will pull the package files to the root directory, and push
+all the residual development files (marked as *ugly* above) away from sight.
+
     $ insideout
     $ tree
     .
-    ├── tests               # untouched folder
-    │   └── (...)
-    ├── metafiles           # residual files went inside this folder
-    │   ├── LICENSE.txt       # residual file
-    │   ├── setup.py          # residual file
-    │   └── tox.ini           # residual file
-    ├── README.md           # residual file left behind on purpose
-    ├── __init__.py         # source-code file
-    ├── main.py             # source-code file
-    └── tools.py            # source-code file
+    ├── metafiles
+    │   ├── __pkgname.txt     # backup file with the package name
+    │   └── (...)             # ugly files went here
+    ├── README.md           # ok. Github can generate an HTML page from this.
+    ├── __init__.py         # ok. exposed
+    ├── main.py             # ok. exposed
+    └── tools.py            # ok. exposed
 
-    2 directories, 9 files
+    1 directory, 8 files
 
-```python setup.py --name``` was used to automaticly inspect the name of
-the package and imediatly swap the files inside its respective folder.
-
-You can reverse the previous swap using the same command: ```insideout```.
+`README.md` was left behind in order to
+allow presenting an HTML page on github. `metafiles/__pkgname.txt` file
+was created to backup the package name, which now allows to reverse the
+previous swap using the same command: `insideout`.
 
 *insideout* is pure Python code, 2 and 3 compatible.
+
+## Workflow
+
+With *insideout* the objective is to keep your public version in the
+explicit form.  The problem is that you need to work on your project in the
+implicit from (i.e. with the *ugly* files on the root directory).
+
+The `insideout` command allows the following workflow:
+
+1. Clone the intended git repository: `git clone <clone_url>`
+2. Swap files to the implicit form: `insideout`
+3. Prefix all git commands with *insideout*. Examples:
+    - `insideout git status`
+    - `insideout git add compiler.py`
+    - `insideout git commit -m "adds compiler"`
+    - `insideout git push origin master`
 
 ## Bad examples
 
