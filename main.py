@@ -8,7 +8,7 @@ import subprocess
 class Config:
     """Sets configuration values for insideout"""
 
-    IGNORE_PATH = '__ignore__'
+    IGNORE_PATH = '__dev__'
     PKGNAME_FNAME = 'package_name.txt'
 
 
