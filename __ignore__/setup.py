@@ -35,7 +35,7 @@ if 'clean' in argv:
 
 
 long_description = """\
-A tool to swap the files on your repository's root directory with the ones inside your python package.
+A tool to develop ready-to-use python repositories.
 
     Why aren't the files inside a Python package the first thing we see when we look at its github repository?
 
