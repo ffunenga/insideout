@@ -22,13 +22,13 @@ class TestCase(unittest.TestCase):
         touch('temp/main.py')
         touch('temp/tools.py')
 
-        os.mkdir('temp/__ignore__')
-        touch('temp/__ignore__/LICENSE.txt')
-        touch('temp/__ignore__/tox.ini')
+        os.mkdir('temp/__dev__')
+        touch('temp/__dev__/LICENSE.txt')
+        touch('temp/__dev__/tox.ini')
         content = "import setuptools\nsetuptools.setup(name='package')\n"
-        touch('temp/__ignore__/setup.py', content)
+        touch('temp/__dev__/setup.py', content)
         content = "package"
-        touch('temp/__ignore__/package_name.txt', content)
+        touch('temp/__dev__/package_name.txt', content)
 
         self.backup_cwd = os.getcwd()
         os.chdir('temp')

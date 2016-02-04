@@ -31,17 +31,17 @@ class TestCase(unittest.TestCase):
     def test_become_explicit(self):
         insideout.main([])
 
-        ref = ['README.md', '__ignore__', '__init__.py', 'main.py', 'tools.py']
+        ref = ['README.md', '__dev__', '__init__.py', 'main.py', 'tools.py']
         files = os.listdir('.')
         self.assertTrue(ref == sorted(files))
 
         ref = ['LICENSE.txt', 'package_name.txt', 'setup.py', 'tox.ini']
-        files = os.listdir('__ignore__')
+        files = os.listdir('__dev__')
         self.assertTrue(ref == sorted(files))
 
-        self.assertTrue(os.path.exists('__ignore__/package_name.txt'))
-        self.assertTrue(os.path.isfile('__ignore__/package_name.txt'))
-        with open('__ignore__/package_name.txt') as f:
+        self.assertTrue(os.path.exists('__dev__/package_name.txt'))
+        self.assertTrue(os.path.isfile('__dev__/package_name.txt'))
+        with open('__dev__/package_name.txt') as f:
             content = f.read().strip()
         self.assertTrue(content == 'package')
 
