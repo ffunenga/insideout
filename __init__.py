@@ -1,8 +1,13 @@
 __version__ = '0.0.2a0'
 __author__ = 'Filipe Funenga'
 __license__ = 'MIT'
-__description__ = ('A tool to swap the files on your repository\'s root '
-                   'directory with the ones inside your python package.')
+__description__ = 'A tool to develop ready-to-use python repositories.'
+__lead__ = """\
+A tool to develop ready-to-use python repositories.
 
+    Why aren't the files inside a Python package the first thing we see when we look at its github repository?
+
+Pure Python code (2 and 3 compatible).
+"""
 
 from .main import main
