@@ -60,7 +60,7 @@ at most **makes use of** your package, without any intentions of further
 developing, testing or deploying it.
 
 This tightens the interpretation of the adjective *ugly* to a point where
-there isn't much margin for subjective though. For example, from this
+there isn't much margin for subjective thought. For example, from this
 perspective it is obvious that `license.txt` should be absolutely postponed
 from the viewer's eyes, simply because it is not needed to make use of the
 code in the package. The same applies to the `tests` directory. If you want
