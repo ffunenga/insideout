@@ -7,7 +7,7 @@ repository from the viewer's eyes, for example by moving away those ugly
 long lists of configuration files or legal files (e.g. `license.txt`,
 `authors.txt`) that can be seen in almost every open-source repository.
 
-Take a look at these exemplary monstrosities:
+Take a look at these notorious monstrosities:
 
 * [pypa/pip 8.0.1](https://github.com/pypa/pip/tree/024cfe17e6685483a5a6abfc8983c086267a5a47) ➙ 15 residual files
 * [mitsuhiko/flask 0.10](https://github.com/mitsuhiko/flask/tree/3b9574fec988fca790ffe78b64ef30b22dd3386a) ➙ 16 residual files
@@ -37,7 +37,7 @@ source tree:
 Basically, what is about to be explained about this structure comes down to
 this:
 
-> The files on the root directory of your repository are ugly if they are not absolutely needed to **make use of** your package.
+> The files on the root directory are ugly if they are not absolutely needed to **make use of** the package.
 
 In commerce, prospects are one thing and clients are another. With our
 open-source repositories a similar distinction can be made about the python
@@ -71,20 +71,58 @@ sight. A folder called `__dev__` is created for this purpose:
     ├── main.py               # ok. explicitly observable, nice!
     └── tools.py              # ok. explicitly observable, nice!
 
-Its almost the same as turning a t-shirt inside out. The small difference is
-that the files and folders are not completely turned *inside out*.
-For example, the `README.md` was left behind in order to allow presenting an
-HTML page on github. There is also some caution in place to avoid moving the
-`.git` folder.
+Its almost the same as turning a t-shirt inside out. For example, the
+`README.md` was left behind in order to allow presenting an HTML page on
+github. There is also some caution in place to avoid moving the `.git` folder.
 
-reverse the previous swap using the same command: `insideout`.
+This resulting structure, as is, is reversible to the previous structure by
+re-executing the command `insideout`.
+
+## Workflow - with `setup.py` improvements
+
+But the problem now, is that `setup.py` is not on the parent folder of the
+package, which makes it complicated to generate distributions or install
+the package. Well.. this is actually easy to solve by the adding the following
+code to the begging of your `setup.py` file:
+
+```python
+import os
+import shutil
+
+PACKAGE_NAME = '<...package name goes here>'
+
+_t = os.path.abspath(__file__)
+cwd = os.path.dirname(_t)
+if os.path.basename(cwd) == '__dev__':
+    os.chdir(cwd)
+    shutil.rmtree(PACKAGE_NAME, ignore_errors=True)
+    ignore_list = shutil.ignore_patterns('__dev__*', '.git*', 'env*', '.tox')
+    shutil.copytree('..', PACKAGE_NAME, ignore=ignore_list)
+```
+
+And that's it. That code enables the `setup.py` to work as expected from
+anywhere.
+
+From the root of the repository you can run these:
+
+    $ python __dev__/setup.py install
+    $ tox -c __dev__/tox.ini
+
+From inside __dev__ you can run these:
+
+    $ python setup.py install
+    $ tox
+
+Even if you reorganize your code in the classical testing/deployment focused
+structure (where all the test configuration files, license, etc., are placed
+in the root directory of your repository) then this setup.py still works.
 
 *insideout* is pure Python code, 2 and 3 compatible.
 
-## Workflow
+## Alternative workflow - without `setup.py` improvements
 
 With *insideout* the objective is to keep your public version in the
-explicit form.  The problem is that you need to work on your project in the
+explicit form. The problem is that you need to work on your project in the
 implicit from (i.e. with the *ugly* files on the root directory).
 
 The `insideout` command allows the following workflow:
