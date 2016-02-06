@@ -2,10 +2,10 @@
 
 > Why aren't the files inside a Python package the first thing we see when we look at its github repository?
 
-*insideout* is a tool to help you postpone the ugliness of your python
+*insideout* is a tool to help you postpone the ugliness of your Python
 repository from the viewer's eyes, for example by moving away those ugly
-long lists of configuration files or legal files (e.g. `license.txt`,
-`authors.txt`) that can be seen in almost every open-source repository.
+long lists of configuration files that can be seen in almost every open-source
+repository.
 
 Take a look at these notorious monstrosities:
 
@@ -15,6 +15,12 @@ Take a look at these notorious monstrosities:
 
 Just look at them: they are **ugly**. Right? There is something unatural to
 the way the root directory of those repositories looks like.
+
+## Installation
+
+*insideout* is pure Python code, 2 and 3 compatible.
+
+## Background
 
 So, with the single design intention of avoiding as much ugliness as
 technically possible in the root directory of your repository, lets look at a
@@ -34,28 +40,29 @@ source tree:
     ├── setup.py            # ugly. should not be here
     └── README.md           # ok. Github can generate an HTML page from this.
 
-Basically, what is about to be explained about this structure comes down to
-this:
+Basically, what is about to be explained comes down to this:
 
-> The files on the root directory are ugly if they are not absolutely needed to **make use of** the package.
+> A file on the root directory is ugly if it is not absolutely needed when **making use of** the package.
 
 In commerce, prospects are one thing and clients are another. With our
 open-source repositories a similar distinction can be made about the python
 developers who look at them: the ones who use our code are one thing and the
-ones who actually develop and contribute to it are another.
+ones who further contribute to it are another. Hence, the adjective *ugly*
+herein used, is analyzed from the first perspective only: the developer who
+**at most** makes use your code, without any intentions of further
+developing, testing or deploying it.
 
-The adjective *ugly* herein used, is analyzed from the developer who **at most**
-makes use your code (without any intentions of developing, testing or deploying
-it). This tightens the interpretation of the adjective *ugly* to a point
-where there isn't much margin for subjective, empirical though. For example, from this
+This tightens the interpretation of the adjective *ugly* to a point where
+there isn't much margin for subjective though. For example, from this
 perspective it is obvious that `license.txt` should be absolutely postponed
-from the viewer's eyes, simply because it is not needed to make use of the code
-in the package. The same applies to the `tests` directory. If you want to
-focus the use of tests in your project, write about it on the `README`
-file, for example.
+from the viewer's eyes, simply because it is not needed to make use of the
+code in the package. The same applies to the `tests` directory. If you want
+to focus the use of tests in your project, write about it on the `README`
+file, for example. These types of entries on your repository root's are ugly
+and their observation should be postponed to a later moment.
 
-With `insideout` we can pull the package source files to the root
-directory, and push all the residual development files and folders away from
+With `insideout` we can pull the package source files to the root directory,
+and push all the residual testing/configuration files and folders away from
 sight. A folder called `__dev__` is created for this purpose:
 
     $ insideout
@@ -73,17 +80,21 @@ sight. A folder called `__dev__` is created for this purpose:
 
 Its almost the same as turning a t-shirt inside out. For example, the
 `README.md` was left behind in order to allow presenting an HTML page on
-github. There is also some caution in place to avoid moving the `.git` folder.
-
-This resulting structure, as is, is reversible to the previous structure by
+github. There is also some caution in place to avoid moving the `.git`
+folder. This resulting structure is reversible to the previous structure by
 re-executing the command `insideout`.
 
-## Workflow - with `setup.py` improvements
+⬛
 
-But the problem now, is that `setup.py` is not on the parent folder of the
-package, which makes it complicated to generate distributions or install
-the package. Well.. this is actually easy to solve by the adding the following
-code to the begging of your `setup.py` file:
+The problem now, is that `setup.py` is not on a folder level immediatly
+above to the package level, which makes it complicated to generate
+distributions or install the package. This is solved in at least the
+following two ways.
+
+## Workflow - `setup.py` fix
+
+It is actually easy to solve the directory problem by the adding the
+following code to the begging of your `setup.py` file:
 
 ```python
 import os
@@ -117,9 +128,7 @@ Even if you reorganize your code in the classical testing/deployment focused
 structure (where all the test configuration files, license, etc., are placed
 in the root directory of your repository) then this setup.py still works.
 
-*insideout* is pure Python code, 2 and 3 compatible.
-
-## Alternative workflow - without `setup.py` improvements
+## Alternative workflow - prefix `git` commands with `insideout`
 
 With *insideout* the objective is to keep your public version in the
 explicit form. The problem is that you need to work on your project in the
