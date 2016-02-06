@@ -91,14 +91,14 @@ github. There is also some caution in place to avoid moving the `.git`
 folder. This resulting structure is reversible to the previous structure by
 re-executing the command `insideout`.
 
-⬛
+## Workflow
 
 The problem now, is that `setup.py` is not on a folder level immediatly
 above to the package level, which makes it complicated to generate
 distributions or install the package. This is solved in at least the
 following two ways.
 
-## Workflow - `setup.py` fix
+#### `setup.py` fix
 
 It is actually easy to solve the directory problem by the adding the
 following code to the begging of your `setup.py` file:
@@ -135,17 +135,16 @@ Even if you reorganize your code in the classical testing/deployment focused
 structure (where all the test configuration files, license, etc., are placed
 in the root directory of your repository) then this setup.py still works.
 
-## Alternative workflow - prefix `git` commands with `insideout`
+#### (alternative) prefix `git` commands with `insideout`
 
-With *insideout* the objective is to keep your public version in the
-explicit form. The problem is that you need to work on your project in the
-implicit from (i.e. with the *ugly* files on the root directory).
-
-The `insideout` command allows the following workflow:
+If you don't want to touch in your `setup.py`, then, in order to maintain
+your public version (the one accesible throught github) in the explicit
+form, you can work locally on your project with the *ugly* files on the root
+directory by preforming the following steps:
 
 1. Clone the intended git repository: `$ git clone <clone_url>`
-2. Swap files to the implicit form: `$ insideout`
-3. Prefix all git commands with *insideout*. Examples:
+2. Swap files to the insideout style: `$ insideout`
+3. Prefix all `git` commands with *insideout*. Examples:
     - `$ insideout git status`
     - `$ insideout git add compiler.py`
     - `$ insideout git commit -m "adds compiler"`
