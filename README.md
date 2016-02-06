@@ -56,7 +56,7 @@ open-source repositories a similar distinction can be made about the python
 developers who look at them: the ones who use our code are one thing and the
 ones who further contribute to it are another. Hence, the adjective *ugly*
 herein used, is analyzed from the first perspective only: the developer who
-**at most** makes use your code, without any intentions of further
+at most **makes use of** your package, without any intentions of further
 developing, testing or deploying it.
 
 This tightens the interpretation of the adjective *ugly* to a point where
