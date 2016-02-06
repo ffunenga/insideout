@@ -1,4 +1,4 @@
-__version__ = '0.0.2'
+__version__ = '0.0.3a0'
 __author__ = 'Filipe Funenga'
 __license__ = 'MIT'
 __lead__ = 'A tool to develop ready-to-use python repositories.'
