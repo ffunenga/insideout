@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Insideout by ffunenga</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Insideout</h1>
+        <p>A tool to develop ready-to-use python repositories.</p>
+
+        <p class="view"><a href="https://github.com/ffunenga/insideout">View the Project on GitHub <small>ffunenga/insideout</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/ffunenga/insideout/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/ffunenga/insideout/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/ffunenga/insideout">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="the-insideout-approach-to-python-packaging" class="anchor" href="#the-insideout-approach-to-python-packaging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The <em>insideout</em> approach to Python packaging</h1>
+
+<blockquote>
+<p>Why aren't the files inside a Python package the first thing we see when we look at its github repository?</p>
+</blockquote>
+
+<p><em>insideout</em> is a tool to help you postpone the ugliness of your Python
+repository from the viewer's eyes, for example by moving away those ugly
+long lists of configuration files that can be seen in almost every open-source
+repository.</p>
+
+<p>Take a look at these notorious monstrosities:</p>
+
+<ul>
+<li>
+<a href="https://github.com/pypa/pip/tree/024cfe17e6685483a5a6abfc8983c086267a5a47">pypa/pip 8.0.1</a> ➙ 15 residual files</li>
+<li>
+<a href="https://github.com/mitsuhiko/flask/tree/3b9574fec988fca790ffe78b64ef30b22dd3386a">mitsuhiko/flask 0.10</a> ➙ 16 residual files</li>
+<li>
+<a href="https://github.com/jkbrzt/httpie/tree/47220763357f5a25cc535af5c4d2f4f092fb9abd">jkbrzt/httpie 0.9.3</a> ➙ 18 residual files</li>
+</ul>
+
+<p>Just look at them: they are <strong>ugly</strong>. Right? There is something unatural to
+the way the root directory of those repositories looks like.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><em>insideout</em> is pure Python code, 2 and 3 compatible. You can download this
+repository from github and install it in your environment with:</p>
+
+<pre><code>$ python __dev__/setup.py install
+</code></pre>
+
+<p>Or you can also go to PyPI and install from the latest version available their:</p>
+
+<pre><code>$ pip install insideout
+</code></pre>
+
+<h2>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Background</h2>
+
+<p>So, with the single design intention of avoiding as much ugliness as
+technically possible in the root directory of your repository, lets look at a
+typical example and see what can be improved. Imagine you have the following
+source tree:</p>
+
+<pre><code>$ tree
+.
+├── package/
+│   ├── __init__.py         # could be in the root directory
+│   ├── main.py             # could be in the root directory
+│   └── tools.py            # could be in the root directory
+├── tests/              # ugly. should not be here
+│   └── (...)
+├── tox.ini             # ugly. should not be here
+├── LICENSE.txt         # ugly. should not be here
+├── setup.py            # ugly. should not be here
+└── README.md           # ok. Github can generate an HTML page from this.
+</code></pre>
+
+<p>Basically, what is about to be explained comes down to this:</p>
+
+<blockquote>
+<p>A file on the root directory is ugly if it is not absolutely needed when <strong>making use of</strong> the package.</p>
+</blockquote>
+
+<p>In commerce, prospects are one thing and clients are another. With our
+open-source repositories a similar distinction can be made about the python
+developers who look at them: the ones who use our code are one thing and the
+ones who further contribute to it are another. Hence, the adjective <em>ugly</em>
+herein used, is analyzed from the first perspective only: the developer who
+at most <strong>makes use of</strong> your package, without any intentions of further
+developing, testing or deploying it.</p>
+
+<p>This tightens the interpretation of the adjective <em>ugly</em> to a point where
+there isn't much margin for subjective thought. For example, from this
+perspective it is obvious that <code>license.txt</code> should be absolutely postponed
+from the viewer's eyes, simply because it is not needed to make use of the
+code in the package. The same applies to the <code>tests</code> directory. If you want
+to focus the use of tests in your project, write about it on the <code>README</code>
+file, for example. These types of entries on your repository root's are ugly
+and their observation should be postponed to a later moment.</p>
+
+<p>With <code>insideout</code> we can pull the package source files to the root directory,
+and push all the residual testing/configuration files and folders away from
+sight. A folder called <code>__dev__</code> is created for this purpose:</p>
+
+<pre><code>$ insideout
+$ tree
+.
+├── __dev__/
+│   ├── tests/              # ok. no longer ugly
+│   ├── setup.py            # ok. no longer ugly
+│   ├── tox.ini             # ok. no longer ugly
+│   └── (...)               # remaining ugly files/folders went all here
+├── README.md             # ok. Github can generate an HTML page from this.
+├── __init__.py           # ok. explicitly observable, nice!
+├── main.py               # ok. explicitly observable, nice!
+└── tools.py              # ok. explicitly observable, nice!
+</code></pre>
+
+<p>Its almost the same as turning a t-shirt inside out. For example, the
+<code>README.md</code> was left behind in order to allow presenting an HTML page on
+github. There is also some caution in place to avoid moving the <code>.git</code>
+folder. This resulting structure is reversible to the previous structure by
+re-executing the command <code>insideout</code>.</p>
+
+<h2>
+<a id="workflow" class="anchor" href="#workflow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Workflow</h2>
+
+<p>The problem now, is that <code>setup.py</code> is not on a folder level immediatly
+above to the package level, which makes it complicated to generate
+distributions or install the package. This is solved in at least the
+following two ways.</p>
+
+<h4>
+<a id="setuppy-fix" class="anchor" href="#setuppy-fix" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>setup.py</code> fix</h4>
+
+<p>It is actually easy to solve the directory problem by the adding the
+following code to the begging of your <code>setup.py</code> file:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> os
+<span class="pl-k">import</span> shutil
+
+<span class="pl-c1">PACKAGE_NAME</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;...package name goes here&gt;<span class="pl-pds">'</span></span>
+
+_t <span class="pl-k">=</span> os.path.abspath(<span class="pl-c1">__file__</span>)
+cwd <span class="pl-k">=</span> os.path.dirname(_t)
+<span class="pl-k">if</span> os.path.basename(cwd) <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">'</span>__dev__<span class="pl-pds">'</span></span>:
+    os.chdir(cwd)
+    shutil.rmtree(<span class="pl-c1">PACKAGE_NAME</span>, <span class="pl-v">ignore_errors</span><span class="pl-k">=</span><span class="pl-c1">True</span>)
+    ignore_list <span class="pl-k">=</span> shutil.ignore_patterns(<span class="pl-s"><span class="pl-pds">'</span>__dev__*<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.git*<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>env*<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.tox<span class="pl-pds">'</span></span>)
+    shutil.copytree(<span class="pl-s"><span class="pl-pds">'</span>..<span class="pl-pds">'</span></span>, <span class="pl-c1">PACKAGE_NAME</span>, <span class="pl-v">ignore</span><span class="pl-k">=</span>ignore_list)</pre></div>
+
+<p>And that's it. That code enables the <code>setup.py</code> to work as expected from
+anywhere.</p>
+
+<p>From the root of the repository you can run these:</p>
+
+<pre><code>$ python __dev__/setup.py install
+$ tox -c __dev__/tox.ini
+</code></pre>
+
+<p>From inside <strong>dev</strong> you can run these:</p>
+
+<pre><code>$ python setup.py install
+$ tox
+</code></pre>
+
+<p>Even if you reorganize your code in the classical testing/deployment focused
+structure (where all the test configuration files, license, etc., are placed
+in the root directory of your repository) then this setup.py still works.</p>
+
+<h4>
+<a id="alternative-prefix-git-commands-with-insideout" class="anchor" href="#alternative-prefix-git-commands-with-insideout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>(alternative) prefix <code>git</code> commands with <code>insideout</code>
+</h4>
+
+<p>If you don't want to touch in your <code>setup.py</code>, then, in order to maintain
+your public version (the one accesible throught github) in the explicit
+form, you can work locally on your project with the <em>ugly</em> files on the root
+directory by preforming the following steps:</p>
+
+<ol>
+<li>Clone the intended git repository: <code>$ git clone &lt;clone_url&gt;</code>
+</li>
+<li>Swap files to the insideout style: <code>$ insideout</code>
+</li>
+<li>Prefix all <code>git</code> commands with <em>insideout</em>. Examples:
+
+<ul>
+<li><code>$ insideout git status</code></li>
+<li><code>$ insideout git add compiler.py</code></li>
+<li><code>$ insideout git commit -m "adds compiler"</code></li>
+<li><code>$ insideout git push origin master</code></li>
+</ul>
+</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/ffunenga">ffunenga</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
