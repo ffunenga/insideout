@@ -42,16 +42,25 @@ if os.path.basename(cwd) == '__dev__':
 # --- END OF SEGMENT OF CODE ------------------------------------------------- #
 
 
+def rmdir(dname):
+    shutil.rmtree(os.path.join('..', dname), ignore_errors=True)
+    shutil.rmtree(dname, ignore_errors=True)
+
+
+if 'reset' in sys.argv[1:]:
+    rmdir('env')
+    sys.argv = [('clean' if a == 'reset' else a) for a in sys.argv]
+
+
 if 'clean' in sys.argv[1:]:
     shutil.rmtree(PACKAGE_NAME, ignore_errors=True)
-    shutil.rmtree('%s.egg-info' % PACKAGE_NAME, ignore_errors=True)
-    shutil.rmtree('build', ignore_errors=True)
-    shutil.rmtree('dist', ignore_errors=True)
-    shutil.rmtree('env', ignore_errors=True)
-    shutil.rmtree(os.path.join('..', 'env'), ignore_errors=True)
-    shutil.rmtree('.tox', ignore_errors=True)
-    shutil.rmtree(os.path.join('..', '.tox'), ignore_errors=True)
-    for root, drs, fns in os.walk('tests'):
+    rmdir('%s.egg-info' % PACKAGE_NAME)
+    rmdir('build')
+    rmdir('dist')
+    rmdir('.tox')
+    rmdir('.cache')
+    rmdir('.eggs')
+    for root, drs, fns in os.walk('.'):
         pycache = os.path.join(root, '__pycache__')
         shutil.rmtree(pycache, ignore_errors=True)
         filtered_fns = filter(lambda f: f.endswith('.pyc'), fns)
@@ -61,13 +70,27 @@ if 'clean' in sys.argv[1:]:
     sys.exit()
 
 
+def get_long_description(fname='README.md'):
+    try:
+        with open(fname) as f:
+            content = f.read()
+    except:
+        content = ''
+    else:
+        ini = content.find('Why')
+        end = content.find('repository.')
+        end += len('repository.')
+        content = content[ini:end]
+    return content
+
+
 package = __import__(PACKAGE_NAME)
 
 
 setuptools.setup(
     name=package.__name__,
-    description=package.__lead__,
-    long_description=package.__description__,
+    description=package.__description__,
+    long_description=get_long_description(),
     version=package.__version__,
     author='Filipe Funenga',
     author_email='fmafunenga@gmail.com',
