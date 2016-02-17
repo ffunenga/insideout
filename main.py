@@ -5,11 +5,8 @@ import shutil
 import subprocess
 
 
-class Config:
-    """Sets configuration values for insideout"""
-
-    IGNORE_PATH = '__dev__'
-    PKGNAME_FNAME = 'package_name.txt'
+IGNORE_PATH = '__dev__'
+PKGNAME_FNAME = 'package_name.txt'
 
 
 class Tools:
@@ -63,23 +60,23 @@ def become_explicit():
     if not (os.path.exists(pkgname) and os.path.isdir(pkgname)):
         sys.exit('package "%s" folder does not exist' % pkgname)
 
-    _err_msg = 'failed to mkdir "%s"' % Config.IGNORE_PATH
+    _err_msg = 'failed to mkdir "%s"' % IGNORE_PATH
     with Tools.OnErrorMsg(_err_msg):
-        os.mkdir(Config.IGNORE_PATH)
+        os.mkdir(IGNORE_PATH)
 
     with Tools.OnErrorMsg('failed to backup package name'):
-        _target = os.path.join(Config.IGNORE_PATH, Config.PKGNAME_FNAME)
+        _target = os.path.join(IGNORE_PATH, PKGNAME_FNAME)
         with open(_target, 'w') as f:
             f.write(pkgname)
 
     files = list(os.listdir('.'))
     readme = Tools.filter_readme(files)
-    ignore_list = [Config.IGNORE_PATH, pkgname, readme, '.git']
+    ignore_list = [IGNORE_PATH, pkgname, readme, '.git']
     _err_fmt = 'failed to hide residual entry "%s" in "%s"'
     for source in files:
         if source not in ignore_list:
-            _target = os.path.join(Config.IGNORE_PATH, source)
-            _err_msg = _err_fmt % (source, Config.IGNORE_PATH)
+            _target = os.path.join(IGNORE_PATH, source)
+            _err_msg = _err_fmt % (source, IGNORE_PATH)
             with Tools.OnErrorMsg(_err_msg):
                 shutil.move(source, _target)
 
@@ -98,7 +95,7 @@ def become_explicit():
 
 
 def become_implicit():
-    _fname = os.path.join(Config.IGNORE_PATH, Config.PKGNAME_FNAME)
+    _fname = os.path.join(IGNORE_PATH, PKGNAME_FNAME)
 
     if not (os.path.exists(_fname) and os.path.isfile(_fname)):
         sys.exit('package name file "%s" does not exist' % _fname)
@@ -112,7 +109,7 @@ def become_implicit():
 
     files = list(os.listdir('.'))
     readme = Tools.filter_readme(files)
-    ignore_list = [Config.IGNORE_PATH, pkgname, readme, '.git']
+    ignore_list = [IGNORE_PATH, pkgname, readme, '.git']
     _err_fmt = 'failed to move package file from "%s" to "%s"'
     for source in files:
         if source not in ignore_list:
@@ -122,26 +119,26 @@ def become_implicit():
                 shutil.move(source, _target)
 
     _err_fmt = 'failed to move residual "%s" to root path'
-    with Tools.TemporaryCWD(Config.IGNORE_PATH):
+    with Tools.TemporaryCWD(IGNORE_PATH):
         for source in os.listdir('.'):
             _target = os.path.join('..', source)
-            _err_msg = _err_fmt % os.path.join(Config.IGNORE_PATH, source)
+            _err_msg = _err_fmt % os.path.join(IGNORE_PATH, source)
             with Tools.OnErrorMsg(_err_msg):
                 shutil.move(source, _target)
 
     _err_fmt = 'failed to delete residual file "%s"'
-    _err_msg = _err_fmt % Config.PKGNAME_FNAME
+    _err_msg = _err_fmt % PKGNAME_FNAME
     with Tools.OnErrorMsg(_err_msg):
-        os.remove(Config.PKGNAME_FNAME)
+        os.remove(PKGNAME_FNAME)
 
     _err_fmt = 'failed to remove dir "%s"'
-    _err_msg = _err_fmt % Config.IGNORE_PATH
+    _err_msg = _err_fmt % IGNORE_PATH
     with Tools.OnErrorMsg(_err_msg):
-        shutil.rmtree(Config.IGNORE_PATH)
+        shutil.rmtree(IGNORE_PATH)
 
 
 def main(argv=sys.argv[1:]):
-    flag = all(f(Config.IGNORE_PATH) for f in [os.path.exists, os.path.isdir])
+    flag = all(f(IGNORE_PATH) for f in [os.path.exists, os.path.isdir])
     if flag:
         become_implicit()
     else:
