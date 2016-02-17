@@ -1,2 +1,14 @@
+insideout/
+
 *.pyc
 __pycache__/
+
+*.egg-info/
+build/
+dist/
+
+env/
+
+.tox
+.cache
+.eggs
